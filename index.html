@@ -38,7 +38,6 @@ margin-top:20px;
 <!-- INTRO -->
 <div id="intro">
 <img src="eyes.png">
-
 <h1>You have been chosen...</h1>
 <button onclick="startApp()">TAP TO START</button>
 </div>
@@ -54,7 +53,6 @@ margin-top:20px;
 <h2>⚡ ARISE SYSTEM</h2>
 
 <p>Welcome Player <span id="userName">...</span></p>
-
 <p>XP: <span id="xp">0</span></p>
 
 <div onclick="addXP()">🔥 Complete Task</div>
@@ -66,7 +64,7 @@ margin-top:20px;
 
 <script>
 
-// 🔥 FIREBASE CONFIG
+// 🔥 FIREBASE
 const firebaseConfig = {
 apiKey: "AIzaSyA4NopPzmu40nGCZIisles1MzPSEgyJC8Q",
 authDomain: "arise-app-5d3c3.firebaseapp.com",
@@ -78,51 +76,40 @@ firebase.initializeApp(firebaseConfig);
 // 🔊 AUDIO
 let bg = new Audio("bg.mp3");
 let tap = new Audio("tap.mp3");
-
 bg.loop = true;
 
 // ⚡ START
 function startApp(){
-
 tap.play();
-
 bg.play().catch(()=>{});
-
 document.getElementById("intro").style.display="none";
 document.getElementById("login").classList.remove("hidden");
-
 }
 
-// ⚡ LOGIN (REDIRECT METHOD)
+// ⚡ LOGIN (REDIRECT)
 function login(){
-
 const provider = new firebase.auth.GoogleAuthProvider();
-
 firebase.auth().signInWithRedirect(provider);
-
 }
 
-// 🔥 HANDLE LOGIN RESULT
-firebase.auth().getRedirectResult()
-.then((result)=>{
+// 🔥 IMPORTANT FIX (LOGIN STATE TRACK)
+firebase.auth().onAuthStateChanged(function(user){
 
-if(result.user){
+if(user){
 
+// USER LOGGED IN
+document.getElementById("intro").style.display="none";
 document.getElementById("login").classList.add("hidden");
 document.getElementById("app").classList.remove("hidden");
 
-document.getElementById("userName").innerText = result.user.displayName;
+document.getElementById("userName").innerText = user.displayName;
 
 }
 
-})
-.catch((error)=>{
-console.log(error);
 });
 
 // ⚡ XP SYSTEM
 let xp=0;
-
 function addXP(){
 xp+=10;
 document.getElementById("xp").innerText=xp;
