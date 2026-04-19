@@ -13,15 +13,21 @@
 
 <body>
 
+<!-- INTRO -->
 <div id="intro">
-  <h1>⚡ ARISE</h1>
-  <button onclick="startApp()">TAP TO START</button>
+  <img src="eyes.png" id="introImg">
+  <div class="center">
+    <h1>You have been chosen...</h1>
+    <button onclick="startApp()">TAP TO START</button>
+  </div>
 </div>
 
+<!-- LOGIN -->
 <div id="login" class="hidden">
   <button onclick="login()">Continue with Google</button>
 </div>
 
+<!-- MAIN APP -->
 <div id="app" class="hidden">
 
   <div class="top">
@@ -33,14 +39,26 @@
   <h3>Welcome <span id="userName"></span></h3>
 
   <div class="tasks">
-    <div onclick="task(this)">Wake Up</div>
-    <div onclick="task(this)">Study</div>
-    <div onclick="task(this)">Workout</div>
-    <div onclick="task(this)">No Phone</div>
+    <div onclick="openTask('Wake Up',20)">🌅 Wake Up</div>
+    <div onclick="openTask('Study',30)">📚 Study</div>
+    <div onclick="openTask('Workout',25)">🏃 Workout</div>
+    <div onclick="openTask('No Phone',20)">📵 No Phone</div>
   </div>
 
   <button onclick="logout()">Logout</button>
 
+</div>
+
+<!-- TASK POPUP -->
+<div id="taskPopup" class="hidden">
+  <h2 id="taskTitle"></h2>
+  <p id="taskXP"></p>
+  <button onclick="completeTask()">Complete</button>
+</div>
+
+<!-- LEVEL UP -->
+<div id="levelPopup" class="hidden">
+  ⚡ LEVEL UP ⚡
 </div>
 
 <script src="script.js"></script>
