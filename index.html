@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARISE ⚡</title>
+
+<style>
+body{
+margin:0;
+background:black;
+color:white;
+font-family:Arial;
+text-align:center;
+}
+
+.hidden{
+display:none;
+}
+
+#intro img{
+width:100%;
+height:100vh;
+object-fit:cover;
+}
+
+button{
+padding:12px;
+background:yellow;
+border:none;
+margin-top:20px;
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- INTRO -->
+<div id="intro">
+<img src="eyes.png">
+
+<h1>You have been chosen...</h1>
+<button onclick="startApp()">TAP TO START</button>
+</div>
+
+<!-- LOGIN -->
+<div id="login" class="hidden">
+<h2>⚡ Login</h2>
+<button onclick="login()">Continue with Google</button>
+</div>
+
+<!-- APP -->
+<div id="app" class="hidden">
+<h2>⚡ ARISE SYSTEM</h2>
+
+<p>XP: <span id="xp">0</span></p>
+
+<div onclick="addXP()">🔥 Complete Task</div>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
+<script>
+
+// FIREBASE
+const firebaseConfig = {
+apiKey: "AIzaSyA4NopPzmu40nGCZIisles1MzPSEgyJC8Q",
+authDomain: "arise-app-5d3c3.firebaseapp.com",
+projectId: "arise-app-5d3c3"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+// AUDIO
+let bg = new Audio("bg.mp3");
+let tap = new Audio("tap.mp3");
+
+bg.loop = true;
+
+// START
+function startApp(){
+
+tap.play();
+
+bg.play().catch(()=>{});
+
+document.getElementById("intro").style.display="none";
+document.getElementById("login").classList.remove("hidden");
+
+}
+
+// LOGIN
+function login(){
+
+const provider = new firebase.auth.GoogleAuthProvider();
+
+firebase.auth().signInWithPopup(provider)
+.then(res=>{
+
+document.getElementById("login").classList.add("hidden");
+document.getElementById("app").classList.remove("hidden");
+
+});
+
+}
+
+// XP
+let xp=0;
+
+function addXP(){
+xp+=10;
+document.getElementById("xp").innerText=xp;
+}
+
+</script>
+
+</body>
+</html>
