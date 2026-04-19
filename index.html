@@ -30,22 +30,31 @@
 <!-- APP -->
 <div id="app" class="hidden">
 
-  <h2>⚡ ARISE SYSTEM</h2>
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div>⚡ XP: <span id="xp">0</span></div>
+    <div>Rank: <span id="rank">E</span></div>
+  </div>
 
-  <p>Welcome Player <span id="userName">...</span></p>
+  <h3>Welcome <span id="userName"></span></h3>
 
-  <p>XP: <span id="xp">0</span> | Level: <span id="lvl">1</span></p>
+  <!-- QUESTS -->
+  <div id="quests">
 
-  <button onclick="addXP()">🔥 Complete Task</button>
+    <div class="quest" onclick="completeTask(this)">🌅 Wake Up</div>
+    <div class="quest" onclick="completeTask(this)">📚 Study</div>
+    <div class="quest" onclick="completeTask(this)">💧 Drink Water</div>
+    <div class="quest" onclick="completeTask(this)">🏃 Workout</div>
+    <div class="quest" onclick="completeTask(this)">📵 No Phone</div>
 
-  <br><br>
+  </div>
 
   <button onclick="logout()">Logout</button>
 
 </div>
 
 <!-- POPUP -->
-<div id="levelPopup" class="hidden">
+<div id="popup" class="hidden">
   <h2 id="popupText"></h2>
 </div>
 

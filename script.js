@@ -1,4 +1,4 @@
-// FIREBASE CONFIG
+// FIREBASE
 const firebaseConfig = {
   apiKey: "AIzaSyA4NopPzmu40nGCZIisles1MzPSEgyJC8Q",
   authDomain: "arise-app-5d3c3.firebaseapp.com",
@@ -14,81 +14,88 @@ let levelSound = new Audio("levelup.mp3");
 
 bg.loop = true;
 
-// GLOBAL STATE
+// STATE
 let currentUser = null;
 let xp = 0;
-let level = 1;
 
 // START
 function startApp(){
-
   tap.play();
-
   bg.play().catch(()=>{});
-
   document.getElementById("intro").style.display="none";
 
   if(currentUser){
-    document.getElementById("app").classList.remove("hidden");
-    document.getElementById("userName").innerText = currentUser.displayName;
+    openApp();
   }else{
     document.getElementById("login").classList.remove("hidden");
   }
-
 }
 
-// LOGIN (REDIRECT METHOD)
+// LOGIN
 function login(){
   const provider = new firebase.auth.GoogleAuthProvider();
   firebase.auth().signInWithRedirect(provider);
 }
 
-// AUTH STATE (IMPORTANT)
-firebase.auth().onAuthStateChanged(function(user){
+// AUTH STATE
+firebase.auth().onAuthStateChanged(user=>{
   if(user){
     currentUser = user;
-
-    document.getElementById("login").classList.add("hidden");
-    document.getElementById("app").classList.remove("hidden");
-
-    document.getElementById("userName").innerText = user.displayName;
+    openApp();
   }
 });
 
-// XP SYSTEM
-function addXP(){
+function openApp(){
+  document.getElementById("login").classList.add("hidden");
+  document.getElementById("app").classList.remove("hidden");
+  document.getElementById("userName").innerText = currentUser.displayName;
+}
+
+// TASK COMPLETE
+function completeTask(task){
+
+  if(task.classList.contains("done")) return;
+
+  task.classList.add("done");
+  task.style.opacity = "0.3";
 
   let gain = 20;
-
   xp += gain;
 
   showPopup("⚡ +" + gain + " XP");
 
-  if(xp >= level * 100){
-    xp = 0;
-    level++;
-    showPopup("🔥 LEVEL UP " + level);
+  updateRank();
+}
 
-    levelSound.play();
-  }
+// RANK SYSTEM
+function updateRank(){
+
+  let rank = "E";
+
+  if(xp >= 500) rank = "S";
+  else if(xp >= 400) rank = "A";
+  else if(xp >= 300) rank = "B";
+  else if(xp >= 200) rank = "C";
+  else if(xp >= 100) rank = "D";
 
   document.getElementById("xp").innerText = xp;
-  document.getElementById("lvl").innerText = level;
+  document.getElementById("rank").innerText = rank;
+
+  if(rank !== "E"){
+    levelSound.play();
+  }
 }
 
 // POPUP
 function showPopup(text){
+  let pop = document.getElementById("popup");
+  document.getElementById("popupText").innerText = text;
 
-  let popup = document.getElementById("levelPopup");
-  let txt = document.getElementById("popupText");
-
-  txt.innerText = text;
-
-  popup.classList.remove("hidden");
+  pop.classList.remove("hidden");
 
   setTimeout(()=>{
-    popup.classList.add("hidden");
-  },1500);
+    pop.classList.add("hidden");
+  },1200);
 }
 
 // LOGOUT

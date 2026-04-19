@@ -7,24 +7,14 @@ text-align:center;
 overflow:hidden;
 }
 
-.hidden{
-display:none;
-}
-
 /* INTRO */
-#intro{
-position:relative;
-height:100vh;
-}
-
 #intro img{
 width:100%;
 height:100vh;
 object-fit:cover;
-opacity:0.7;
+opacity:0.6;
 }
 
-/* CENTER */
 .center{
 position:absolute;
 top:50%;
@@ -34,16 +24,65 @@ transform:translate(-50%,-50%);
 
 /* BUTTON */
 button{
-padding:12px 20px;
+padding:10px 20px;
 background:yellow;
 border:none;
 margin-top:20px;
-font-weight:bold;
-cursor:pointer;
+}
+
+/* HIDE */
+.hidden{
+display:none;
+}
+
+/* SNOW EFFECT */
+body::after{
+content:"";
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:url("snow.jpg");
+opacity:0.15;
+animation:snow 10s linear infinite;
+pointer-events:none;
+}
+
+@keyframes snow{
+from{background-position:0 0;}
+to{background-position:0 1000px;}
+}
+
+/* TOP BAR */
+.topbar{
+display:flex;
+justify-content:space-around;
+padding:10px;
+background:#111;
+border-bottom:1px solid cyan;
+}
+
+/* QUESTS */
+#quests{
+margin-top:20px;
+}
+
+.quest{
+margin:10px;
+padding:15px;
+border:1px solid cyan;
+border-radius:10px;
+background:rgba(0,0,0,0.6);
+transition:0.3s;
+}
+
+.quest:active{
+transform:scale(0.9);
 }
 
 /* POPUP */
-#levelPopup{
+#popup{
 position:fixed;
 top:40%;
 left:50%;
@@ -52,5 +91,4 @@ background:#001f3f;
 padding:20px;
 border:2px solid cyan;
 box-shadow:0 0 20px cyan;
-z-index:999;
 }
