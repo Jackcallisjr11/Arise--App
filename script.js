@@ -17,56 +17,49 @@ bg.loop = true;
 let currentUser = null;
 let userData = {xp:0, coins:0, streak:0};
 
-// 🔥 IMPORTANT: WAIT FOR AUTH
-firebase.auth().onAuthStateChanged(async function(user){
-
-  if(user){
-    currentUser = user;
-
-    // 🔥 Load data
-    const doc = await db.collection("users").doc(user.uid).get();
-
-    if(doc.exists){
-      userData = doc.data();
-    }else{
-      await db.collection("users").doc(user.uid).set(userData);
-    }
-
-    // 👉 DIRECT OPEN APP (IMPORTANT FIX)
-    openApp();
-  }
-
-});
-
 // START
 function startApp(){
 
   tap.play();
   bg.play().catch(()=>{});
 
-  document.getElementById("intro").style.display = "none";
+  document.getElementById("intro").style.display="none";
 
-  // ⚡ WAIT SMALL TIME FOR AUTH
-  setTimeout(()=>{
-    if(currentUser){
-      openApp();
-    }else{
-      document.getElementById("login").classList.remove("hidden");
-    }
-  },500);
-
+  // 👇 directly show login
+  document.getElementById("login").classList.remove("hidden");
 }
 
-// LOGIN
+// LOGIN (POPUP — FINAL FIX)
 function login(){
+
   const provider = new firebase.auth.GoogleAuthProvider();
-  firebase.auth().signInWithRedirect(provider);
+
+  firebase.auth().signInWithPopup(provider)
+  .then(async (result)=>{
+
+    currentUser = result.user;
+
+    // 🔥 load data
+    const doc = await db.collection("users").doc(currentUser.uid).get();
+
+    if(doc.exists){
+      userData = doc.data();
+    }else{
+      await db.collection("users").doc(currentUser.uid).set(userData);
+    }
+
+    openApp();
+
+  })
+  .catch((error)=>{
+    console.log("Login error:", error);
+    alert("Login failed");
+  });
 }
 
 // OPEN APP
 function openApp(){
 
-  document.getElementById("intro").style.display="none";
   document.getElementById("login").classList.add("hidden");
   document.getElementById("app").classList.remove("hidden");
 
@@ -93,6 +86,7 @@ function completeTask(task){
 
 // RANK
 function updateRank(){
+
   let xp = userData.xp;
   let rank = "E";
 
