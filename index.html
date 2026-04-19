@@ -8,6 +8,7 @@
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 </head>
 
 <body>
@@ -16,7 +17,7 @@
 <div id="intro">
   <img src="eyes.png">
   <div class="center">
-    <h1>You have been chosen...</h1>
+    <h1>ARISE ⚡</h1>
     <button onclick="startApp()">TAP TO START</button>
   </div>
 </div>
@@ -30,23 +31,30 @@
 <!-- APP -->
 <div id="app" class="hidden">
 
-  <!-- TOP BAR -->
   <div class="topbar">
-    <div>⚡ XP: <span id="xp">0</span></div>
+    <div>XP: <span id="xp">0</span></div>
     <div>Rank: <span id="rank">E</span></div>
+    <div>🔥 Streak: <span id="streak">0</span></div>
   </div>
 
   <h3>Welcome <span id="userName"></span></h3>
 
   <!-- QUESTS -->
   <div id="quests">
+    <div class="quest" onclick="completeTask(this)">Wake Up</div>
+    <div class="quest" onclick="completeTask(this)">Study</div>
+    <div class="quest" onclick="completeTask(this)">Workout</div>
+    <div class="quest" onclick="completeTask(this)">No Phone</div>
+  </div>
 
-    <div class="quest" onclick="completeTask(this)">🌅 Wake Up</div>
-    <div class="quest" onclick="completeTask(this)">📚 Study</div>
-    <div class="quest" onclick="completeTask(this)">💧 Drink Water</div>
-    <div class="quest" onclick="completeTask(this)">🏃 Workout</div>
-    <div class="quest" onclick="completeTask(this)">📵 No Phone</div>
+  <!-- INVENTORY -->
+  <h3>💰 Coins: <span id="coins">0</span></h3>
 
+  <!-- GWEN AI -->
+  <div id="gwenBox">
+    <input id="chatInput" placeholder="Talk to Gwen...">
+    <button onclick="talkGwen()">Send</button>
+    <p id="gwenReply"></p>
   </div>
 
   <button onclick="logout()">Logout</button>
