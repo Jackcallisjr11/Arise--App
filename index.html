@@ -24,49 +24,23 @@
 
 <!-- LOGIN -->
 <div id="login" class="hidden">
-  <h2>⚡ Login</h2>
+  <h2>Login</h2>
   <button onclick="login()">Continue with Google</button>
 </div>
 
 <!-- APP -->
 <div id="app" class="hidden">
 
-  <div class="topbar">
-    <div>XP: <span id="xp">0</span></div>
-    <div>Rank: <span id="rank">E</span></div>
-    <div>🔥 Streak: <span id="streak">0</span></div>
-  </div>
+  <h2>⚡ ARISE SYSTEM</h2>
+  <p>Welcome <span id="userName"></span></p>
 
-  <h3>Welcome <span id="userName"></span></h3>
+  <p>XP: <span id="xp">0</span></p>
 
-  <!-- QUESTS -->
-  <div id="quests">
-    <div class="quest" onclick="completeTask(this)">Wake Up</div>
-    <div class="quest" onclick="completeTask(this)">Study</div>
-    <div class="quest" onclick="completeTask(this)">Workout</div>
-    <div class="quest" onclick="completeTask(this)">No Phone</div>
-  </div>
-
-  <!-- INVENTORY -->
-  <h3>💰 Coins: <span id="coins">0</span></h3>
-
-  <!-- GWEN AI -->
-  <div id="gwenBox">
-    <input id="chatInput" placeholder="Talk to Gwen...">
-    <button onclick="talkGwen()">Send</button>
-    <p id="gwenReply"></p>
-  </div>
-
+  <button onclick="addXP()">Complete Task</button>
   <button onclick="logout()">Logout</button>
 
 </div>
 
-<!-- POPUP -->
-<div id="popup" class="hidden">
-  <h2 id="popupText"></h2>
-</div>
-
 <script src="script.js"></script>
-
 </body>
 </html>

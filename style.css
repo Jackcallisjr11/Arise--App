@@ -12,7 +12,7 @@ text-align:center;
 width:100%;
 height:100vh;
 object-fit:cover;
-opacity:0.5;
+opacity:0.6;
 }
 
 .center{
@@ -26,37 +26,5 @@ button{
 padding:10px;
 background:yellow;
 border:none;
-margin-top:10px;
-}
-
-/* TOP */
-.topbar{
-display:flex;
-justify-content:space-around;
-background:#111;
-padding:10px;
-}
-
-/* QUEST */
-.quest{
 margin:10px;
-padding:15px;
-border:1px solid cyan;
-border-radius:10px;
-}
-
-/* GWEN */
-#gwenBox{
-margin-top:20px;
-}
-
-/* POPUP */
-#popup{
-position:fixed;
-top:40%;
-left:50%;
-transform:translate(-50%,-50%);
-background:#001f3f;
-padding:20px;
-border:2px solid cyan;
 }
