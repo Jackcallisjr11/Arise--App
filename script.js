@@ -1,143 +1,98 @@
-// ⚡ WAIT UNTIL PAGE LOAD
-document.addEventListener("DOMContentLoaded", function () {
+// FIREBASE CONFIG
+const firebaseConfig = {
+  apiKey: "AIzaSyA4NopPzmu40nGCZIisles1MzPSEgyJC8Q",
+  authDomain: "arise-app-5d3c3.firebaseapp.com",
+  projectId: "arise-app-5d3c3"
+};
 
-  // 🔥 ELEMENTS
-  const intro = document.getElementById("intro");
-  const loginPage = document.getElementById("login");
-  const app = document.getElementById("app");
+firebase.initializeApp(firebaseConfig);
 
-  const startBtn = document.getElementById("startBtn");
-  const loginBtn = document.getElementById("loginBtn");
+// AUDIO
+let bg = new Audio("bg.mp3");
+let tap = new Audio("tap.mp3");
+let levelSound = new Audio("levelup.mp3");
 
-  const userName = document.getElementById("userName");
-  const xpText = document.getElementById("xp");
+bg.loop = true;
 
-  // 🔊 AUDIO
-  let bgMusic = new Audio("bg.mp3");
-  let tapSound = new Audio("tap.mp3");
-  let levelSound = new Audio("levelup.mp3");
+// GLOBAL STATE
+let currentUser = null;
+let xp = 0;
+let level = 1;
 
-  bgMusic.loop = true;
+// START
+function startApp(){
 
-  // ⚡ GLOBAL STATE
-  let currentUser = null;
-  let xp = 0;
-  let level = 1;
+  tap.play();
 
-  // =========================================
-  // 🔥 AUTH STATE (IMPORTANT)
-  // =========================================
-  firebase.auth().onAuthStateChanged(function(user){
-    if(user){
-      currentUser = user;
-    }
-  });
+  bg.play().catch(()=>{});
 
-  // =========================================
-  // ⚡ START BUTTON
-  // =========================================
-  if(startBtn){
-    startBtn.addEventListener("click", () => {
+  document.getElementById("intro").style.display="none";
 
-      try{
-        tapSound.play();
-        bgMusic.play();
-      }catch(e){
-        console.log("Audio blocked");
-      }
-
-      intro.style.display = "none";
-
-      if(currentUser){
-        // already logged in
-        app.classList.remove("hidden");
-        userName.innerText = currentUser.displayName;
-      }else{
-        // show login
-        loginPage.classList.remove("hidden");
-      }
-
-    });
+  if(currentUser){
+    document.getElementById("app").classList.remove("hidden");
+    document.getElementById("userName").innerText = currentUser.displayName;
+  }else{
+    document.getElementById("login").classList.remove("hidden");
   }
 
-  // =========================================
-  // ⚡ LOGIN BUTTON
-  // =========================================
-  if(loginBtn){
-    loginBtn.onclick = () => {
+}
 
-      const provider = new firebase.auth.GoogleAuthProvider();
-      firebase.auth().signInWithRedirect(provider);
+// LOGIN (REDIRECT METHOD)
+function login(){
+  const provider = new firebase.auth.GoogleAuthProvider();
+  firebase.auth().signInWithRedirect(provider);
+}
 
-    };
+// AUTH STATE (IMPORTANT)
+firebase.auth().onAuthStateChanged(function(user){
+  if(user){
+    currentUser = user;
+
+    document.getElementById("login").classList.add("hidden");
+    document.getElementById("app").classList.remove("hidden");
+
+    document.getElementById("userName").innerText = user.displayName;
   }
-
-  // =========================================
-  // 🔥 HANDLE REDIRECT RESULT
-  // =========================================
-  firebase.auth().getRedirectResult()
-  .then((result)=>{
-    if(result.user){
-      currentUser = result.user;
-
-      loginPage.classList.add("hidden");
-      app.classList.remove("hidden");
-
-      userName.innerText = currentUser.displayName;
-    }
-  })
-  .catch((error)=>{
-    console.log("Login error:", error);
-  });
-
-  // =========================================
-  // ⚡ XP SYSTEM
-  // =========================================
-  window.addXP = function(){
-
-    let gained = 10;
-    xp += gained;
-
-    showPopup("⚡ +"+gained+" XP");
-
-    // LEVEL SYSTEM (Tough)
-    if(xp >= level * 100){
-      xp = 0;
-      level++;
-
-      showPopup("🔥 LEVEL UP "+level);
-
-      try{ levelSound.play(); }catch(e){}
-    }
-
-    xpText.innerText = xp;
-  }
-
-  // =========================================
-  // ⚡ POPUP SYSTEM
-  // =========================================
-  function showPopup(text){
-
-    let popup = document.getElementById("levelPopup");
-
-    if(!popup) return;
-
-    let txt = document.getElementById("popupText");
-    txt.innerText = text;
-
-    popup.classList.remove("hidden");
-
-    setTimeout(()=>{
-      popup.classList.add("hidden");
-    },1500);
-  }
-
-  // =========================================
-  // ⚡ LOGOUT
-  // =========================================
-  window.logout = function(){
-    firebase.auth().signOut();
-    location.reload();
-  }
-
 });
+
+// XP SYSTEM
+function addXP(){
+
+  let gain = 20;
+
+  xp += gain;
+
+  showPopup("⚡ +" + gain + " XP");
+
+  if(xp >= level * 100){
+    xp = 0;
+    level++;
+    showPopup("🔥 LEVEL UP " + level);
+
+    levelSound.play();
+  }
+
+  document.getElementById("xp").innerText = xp;
+  document.getElementById("lvl").innerText = level;
+}
+
+// POPUP
+function showPopup(text){
+
+  let popup = document.getElementById("levelPopup");
+  let txt = document.getElementById("popupText");
+
+  txt.innerText = text;
+
+  popup.classList.remove("hidden");
+
+  setTimeout(()=>{
+    popup.classList.add("hidden");
+  },1500);
+}
+
+// LOGOUT
+function logout(){
+  firebase.auth().signOut();
+  location.reload();
+}
