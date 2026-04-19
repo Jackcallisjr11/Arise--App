@@ -1,185 +1,69 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>ARISE ⚡</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARISE ⚡</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
 
-  <!-- PWA -->
-  <link rel="manifest" href="manifest.json">
-
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial;
-      background: black;
-      color: white;
-      text-align: center;
-    }
-
-    h1 { color: yellow; margin-top: 20px; }
-
-    input {
-      padding: 10px;
-      border-radius: 5px;
-      border: none;
-      margin: 10px;
-    }
-
-    .card {
-      border: 1px solid white;
-      border-radius: 10px;
-      padding: 15px;
-      margin: 15px;
-    }
-
-    button {
-      background: yellow;
-      color: black;
-      border: none;
-      padding: 10px;
-      margin: 5px;
-      border-radius: 5px;
-      font-weight: bold;
-    }
-
-    #xp { color: lightgreen; }
-    #streak { color: orange; }
-  </style>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 </head>
 
 <body>
 
-<h1>⚡ ARISE</h1>
+<!-- INTRO -->
+<div id="intro">
+  <img src="eyes.png" id="eyes">
 
-<div class="card">
-  <h3>Set Your Name</h3>
-  <input type="text" id="nameInput" placeholder="Enter name">
-  <button onclick="saveName()">Save</button>
+  <div class="introText">
+    <h1>You have been chosen...</h1>
+    <button id="startBtn">TAP TO START</button>
+  </div>
 </div>
 
-<h2 id="welcome">Welcome Player</h2>
+<!-- LOGIN -->
+<div id="login" class="hidden">
+  <h2>⚡ System Activation</h2>
+  <button id="loginBtn">Continue with Google</button>
+</div>
 
-<h3 id="rank">Rank: E</h3>
-<h3 id="xp">XP: 0</h3>
-<h3 id="streak">🔥 Streak: 0</h3>
+<!-- APP -->
+<div id="app" class="hidden">
 
-<div class="card">
-  <h3>Daily Tasks</h3>
+  <div class="topbar">
+    <div>⚡ XP: <span id="xp">0</span> | LVL: <span id="lvl">1</span></div>
+    <div id="userName"></div>
+  </div>
 
-  <button onclick="completeTask('Wake Up')">Wake Up</button>
-  <button onclick="completeTask('Prayer')">Prayer</button>
-  <button onclick="completeTask('Study')">Study</button>
-  <button onclick="completeTask('Phone Control')">Phone Control</button>
+  <div id="questPanel">
+    <h2>DAILY QUEST</h2>
+
+    <div class="quest" onclick="openTask('water')">💧 Drink Water</div>
+    <div class="quest" onclick="openTask('wakeup')">🌅 Wake Up</div>
+    <div class="quest" onclick="openTask('study')">📚 Study</div>
+  </div>
 
 </div>
 
-<div class="card">
-  <h3>System Log</h3>
-  <p id="log"></p>
+<!-- TASK POPUP -->
+<div id="taskPopup" class="hidden">
+  <div class="box">
+    <h2 id="taskTitle"></h2>
+    <p id="gainText"></p>
+    <input id="taskInput" placeholder="Enter value">
+    <button onclick="completeTask()">Complete</button>
+  </div>
 </div>
 
-<div class="card">
-  <h3>⚡ Gwen Mode</h3>
-  <button onclick="openGwen()">Open Gwen</button>
+<!-- LEVEL POPUP -->
+<div id="levelPopup" class="hidden">
+  <div class="box">
+    <h2>⚡ SYSTEM ⚡</h2>
+    <p id="popupText"></p>
+  </div>
 </div>
 
-<script>
-
-// NAME
-function saveName() {
-  let name = document.getElementById("nameInput").value;
-  localStorage.setItem("playerName", name);
-  loadName();
-}
-
-function loadName() {
-  let name = localStorage.getItem("playerName") || "Jack";
-  document.getElementById("welcome").innerText = "Welcome Player " + name;
-}
-loadName();
-
-// DATE + STREAK
-let today = new Date().toDateString();
-let savedDate = localStorage.getItem("date");
-let lastActive = localStorage.getItem("lastActive");
-
-if (savedDate !== today) {
-  localStorage.setItem("tasks", JSON.stringify({}));
-  localStorage.setItem("date", today);
-
-  let yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
-  yesterday = yesterday.toDateString();
-
-  let streak = parseInt(localStorage.getItem("streak")) || 0;
-
-  if (lastActive === yesterday) {
-    streak++;
-  } else {
-    streak = 0;
-  }
-
-  localStorage.setItem("streak", streak);
-}
-
-let xp = parseInt(localStorage.getItem("xp")) || 0;
-let streak = parseInt(localStorage.getItem("streak")) || 0;
-let completedTasks = JSON.parse(localStorage.getItem("tasks")) || {};
-
-updateDisplay();
-
-function completeTask(task) {
-  if (completedTasks[task]) return;
-
-  xp += 20;
-  completedTasks[task] = true;
-
-  localStorage.setItem("xp", xp);
-  localStorage.setItem("tasks", JSON.stringify(completedTasks));
-  localStorage.setItem("lastActive", today);
-
-  document.getElementById("log").innerHTML += task + " ✅<br>";
-
-  disableButton(task);
-  updateDisplay();
-}
-
-function disableButton(task) {
-  document.querySelectorAll("button").forEach(btn => {
-    if (btn.innerText === task) {
-      btn.disabled = true;
-      btn.style.background = "gray";
-    }
-  });
-}
-
-function updateDisplay() {
-  document.getElementById("xp").innerText = "XP: " + xp;
-  document.getElementById("streak").innerText = "🔥 Streak: " + streak;
-
-  let rank = "E";
-  if (xp >= 100) rank = "D";
-  if (xp >= 200) rank = "C";
-  if (xp >= 300) rank = "B";
-  if (xp >= 400) rank = "A";
-  if (xp >= 500) rank = "S";
-
-  document.getElementById("rank").innerText = "Rank: " + rank;
-}
-
-window.onload = () => {
-  for (let task in completedTasks) {
-    disableButton(task);
-  }
-};
-
-// GWEN MODE
-function openGwen() {
-  window.open("https://chat.openai.com");
-}
-
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
