@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ARISE ⚡</title>
+<title>⚡ ARISE SYSTEM</title>
 
 <style>
 body{
@@ -11,23 +11,61 @@ background:black;
 color:white;
 font-family:Arial;
 text-align:center;
+overflow:hidden;
 }
 
+/* HIDE */
 .hidden{
 display:none;
+}
+
+/* INTRO */
+#intro{
+position:relative;
+height:100vh;
 }
 
 #intro img{
 width:100%;
 height:100vh;
 object-fit:cover;
+opacity:0.7;
 }
 
+/* CENTER TEXT */
+.center{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+}
+
+/* BUTTON */
 button{
-padding:12px;
+padding:12px 20px;
 background:yellow;
 border:none;
 margin-top:20px;
+font-weight:bold;
+cursor:pointer;
+}
+
+/* APP UI */
+#app{
+padding:20px;
+}
+
+/* POPUP */
+#levelPopup{
+position:fixed;
+top:40%;
+left:50%;
+transform:translate(-50%,-50%);
+background:#001f3f;
+padding:20px;
+border:2px solid cyan;
+box-shadow:0 0 20px cyan;
+z-index:999;
 }
 </style>
 
@@ -35,87 +73,50 @@ margin-top:20px;
 
 <body>
 
-<!-- INTRO -->
+<!-- ⚡ INTRO SCREEN -->
 <div id="intro">
 <img src="eyes.png">
+
+<div class="center">
 <h1>You have been chosen...</h1>
-<button onclick="startApp()">TAP TO START</button>
+<button id="startBtn">TAP TO START</button>
+</div>
 </div>
 
-<!-- LOGIN -->
+<!-- ⚡ LOGIN SCREEN -->
 <div id="login" class="hidden">
 <h2>⚡ Login</h2>
-<button onclick="login()">Continue with Google</button>
+<button id="loginBtn">Continue with Google</button>
 </div>
 
-<!-- APP -->
+<!-- ⚡ MAIN APP -->
 <div id="app" class="hidden">
+
 <h2>⚡ ARISE SYSTEM</h2>
 
 <p>Welcome Player <span id="userName">...</span></p>
+
 <p>XP: <span id="xp">0</span></p>
 
-<div onclick="addXP()">🔥 Complete Task</div>
+<button onclick="addXP()">🔥 Complete Task</button>
+
+<br><br>
+
+<button onclick="logout()">Logout</button>
 
 </div>
 
+<!-- ⚡ LEVEL POPUP -->
+<div id="levelPopup" class="hidden">
+<h2 id="popupText">+XP</h2>
+</div>
+
+<!-- 🔥 FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
-<script>
-
-// 🔥 FIREBASE
-const firebaseConfig = {
-apiKey: "AIzaSyA4NopPzmu40nGCZIisles1MzPSEgyJC8Q",
-authDomain: "arise-app-5d3c3.firebaseapp.com",
-projectId: "arise-app-5d3c3"
-};
-
-firebase.initializeApp(firebaseConfig);
-
-// 🔊 AUDIO
-let bg = new Audio("bg.mp3");
-let tap = new Audio("tap.mp3");
-bg.loop = true;
-
-// ⚡ START
-function startApp(){
-tap.play();
-bg.play().catch(()=>{});
-document.getElementById("intro").style.display="none";
-document.getElementById("login").classList.remove("hidden");
-}
-
-// ⚡ LOGIN (REDIRECT)
-function login(){
-const provider = new firebase.auth.GoogleAuthProvider();
-firebase.auth().signInWithRedirect(provider);
-}
-
-// 🔥 IMPORTANT FIX (LOGIN STATE TRACK)
-firebase.auth().onAuthStateChanged(function(user){
-
-if(user){
-
-// USER LOGGED IN
-document.getElementById("intro").style.display="none";
-document.getElementById("login").classList.add("hidden");
-document.getElementById("app").classList.remove("hidden");
-
-document.getElementById("userName").innerText = user.displayName;
-
-}
-
-});
-
-// ⚡ XP SYSTEM
-let xp=0;
-function addXP(){
-xp+=10;
-document.getElementById("xp").innerText=xp;
-}
-
-</script>
+<!-- 🔥 YOUR SCRIPT -->
+<script src="script.js"></script>
 
 </body>
 </html>
