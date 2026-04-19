@@ -13,34 +13,37 @@
 
 <body>
 
-<!-- INTRO -->
 <div id="intro">
-  <img src="eyes.png">
-  <div class="center">
-    <h1>ARISE ⚡</h1>
-    <button onclick="startApp()">TAP TO START</button>
-  </div>
+  <h1>⚡ ARISE</h1>
+  <button onclick="startApp()">TAP TO START</button>
 </div>
 
-<!-- LOGIN -->
 <div id="login" class="hidden">
-  <h2>Login</h2>
   <button onclick="login()">Continue with Google</button>
 </div>
 
-<!-- APP -->
 <div id="app" class="hidden">
 
-  <h2>⚡ ARISE SYSTEM</h2>
-  <p>Welcome <span id="userName"></span></p>
+  <div class="top">
+    <span>XP: <span id="xp">0</span></span>
+    <span>Level: <span id="level">1</span></span>
+    <span>Rank: <span id="rank">E</span></span>
+  </div>
 
-  <p>XP: <span id="xp">0</span></p>
+  <h3>Welcome <span id="userName"></span></h3>
 
-  <button onclick="addXP()">Complete Task</button>
+  <div class="tasks">
+    <div onclick="task(this)">Wake Up</div>
+    <div onclick="task(this)">Study</div>
+    <div onclick="task(this)">Workout</div>
+    <div onclick="task(this)">No Phone</div>
+  </div>
+
   <button onclick="logout()">Logout</button>
 
 </div>
 
 <script src="script.js"></script>
+
 </body>
 </html>

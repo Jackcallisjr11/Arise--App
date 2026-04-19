@@ -1,30 +1,29 @@
 body{
-margin:0;
 background:black;
 color:white;
-font-family:Arial;
 text-align:center;
+font-family:Arial;
 }
 
 .hidden{display:none;}
 
-#intro img{
-width:100%;
-height:100vh;
-object-fit:cover;
-opacity:0.6;
+.top{
+display:flex;
+justify-content:space-around;
+padding:10px;
+border-bottom:1px solid cyan;
 }
 
-.center{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
+.tasks div{
+margin:10px;
+padding:15px;
+border:1px solid cyan;
+border-radius:10px;
 }
 
 button{
 padding:10px;
 background:yellow;
 border:none;
-margin:10px;
+margin-top:10px;
 }
